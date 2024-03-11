@@ -1,0 +1,62 @@
+// тут описан некий контракт того как должно выглядит наше gRPC приложение
+syntax = "proto3";
+
+package auth;
+
+option  go_package = "nickolay.authFitnes.v1;authFitnesv1";
+
+service Auth{
+  rpc Register(RegisterRequest) returns (RegisterResponse); // Метод регистрации
+  rpc Login(LoginRequest) returns (LoginResponse);
+  rpc EditProfile (EditRequest) returns (EditResponse);
+  rpc GetUserData (GetDataRequest) returns (GetDataResponse);
+}
+// ============================================================================
+// Регистрация
+// Запрос
+message RegisterRequest{
+  string email = 1; // Email регистрируемого пользователя
+  string password = 2; // пароль регистрируемого пользователя
+  string name = 3;
+  string surname = 4;
+  string patronymic = 5;
+  string role = 6;
+  string phoneNumber = 7;
+}
+
+// Ответ
+message RegisterResponse{
+  int64 user_id = 1; // ID зарегистрированного  пользователя
+}
+// =============================================================================
+message EditRequest{
+  int64 user_id = 1;
+  string name = 2;
+  string surname = 3;
+  string patronymic = 4;
+}
+message EditResponse{
+  string message = 1;
+}
+// ============================================================================
+message LoginRequest{
+  string email = 1;// Email входящего пользователя
+  string password = 2;// Пароль входящего пользователя
+}
+message LoginResponse{
+  string token = 1; // Токен аутентификации
+}
+// ============================================================================
+message GetDataRequest{
+  int64 user_id = 1;
+}
+message GetDataResponse{
+  string email = 1; // Email регистрируемого пользователя
+  string name = 2;
+  string surname = 3;
+  string patronymic = 4;
+  string role = 5;
+  string phoneNumber = 6;
+}
+// ============================================================================
+

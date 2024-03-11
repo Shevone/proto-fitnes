@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package lessons;
+
+option  go_package = "nickolay.lessonsFitnes.v1;lessonsFitnesv1";
+
+enum Difficulty {
+  EASY = 0;
+  MEDIUM = 1;
+  HARD = 2;
+}
+message Lesson {
+  int64 lesson_id = 1;
+  string title = 2; // Название занятия
+  string time = 3;
+  int64 trainer_id = 4;
+  int32 available_seats = 5;
+  string description = 6;
+  Difficulty difficulty = 7;
+  int32 is_complete = 8;
+}
+// Создать
+// Удалить
+// Редактировать
+// Найти (по тренеру, по пользователю)
+// Закрыть
+service LessonsService{
+  rpc CreateLesson(CreateRequest) returns (CreateResponse); // Метод регистрации
+  rpc DeleteLesson(DeleteRequest) returns (DeleteResponse); // Удалить занятие
+  rpc EditLesson (EditRequest) returns (EditResponse); // Редактировать занятие
+  rpc GetLessonsByTrainer(GetRequest) returns (GetResponse); // Все занятия по id тренера
+  rpc GetLessonsByUser(GetRequest) returns (GetResponse); // Все занятия по id пользователя
+  rpc GetAllLessons(GetRequest) returns (GetResponse); // Достать все занятия
+  rpc CloseLesson (CloseRequest) returns (CloseResponse); // Закрыть занятие
+  rpc SignUpForLessonOrCancel (SignUpOrCancelRequest) returns (SignUpOrCancelResponse); // Записаться на занятие или выписаться
+}
+// ======================================================================================
+message CreateRequest{
+  string title = 1; // Название занятия
+  string time = 2;
+  int64 trainer_id = 3;
+  int32 available_seats = 4;
+  string description = 5;
+  Difficulty difficulty = 6;
+}
+message CreateResponse{
+  int64 lesson_id = 1;
+}
+// ======================================================================================
+message DeleteRequest{
+  int64 lesson_id = 1;
+}
+message DeleteResponse{
+  bool result = 1;
+}
+// ======================================================================================
+message EditRequest{
+  Lesson lesson = 1;
+}
+message EditResponse{
+  int64 lesson_id = 1;
+}
+// ======================================================================================
+message GetRequest{
+  int64 get_id = 1;
+  int32 page = 2;
+}
+message GetResponse{
+  repeated Lesson lessons =1;
+}
+// ======================================================================================
+message CloseRequest{
+  int64 trainer_id = 1;
+}
+message CloseResponse{
+  string message = 1;
+}
+// ======================================================================================
+message SignUpOrCancelRequest{
+  int64 user_id = 1;
+  int64 lesson_id = 2;
+}
+message SignUpOrCancelResponse{
+  string message = 1;
+}
+// ======================================================================================
+
