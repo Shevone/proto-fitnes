@@ -9,6 +9,7 @@
 package authFitnesv1
 
 import (
+	authFitnesv1 "github.com/Shevone/proto-fitnes/gen/go/nickolay.authFitnes.v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -162,6 +163,7 @@ func (*RegisterResponse) Descriptor() ([]byte, []int) {
 }
 
 func (x *RegisterResponse) GetUserId() int64 {
+
 	if x != nil {
 		return x.UserId
 	}

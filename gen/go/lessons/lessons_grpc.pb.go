@@ -28,6 +28,7 @@ type LessonsServiceClient interface {
 	GetLessonsByTrainer(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	GetLessonsByUser(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	GetAllLessons(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
+	GetLesson(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*Lesson, error)
 	CloseLesson(ctx context.Context, in *CloseRequest, opts ...grpc.CallOption) (*CloseResponse, error)
 	SignUpForLessonOrCancel(ctx context.Context, in *SignUpOrCancelRequest, opts ...grpc.CallOption) (*SignUpOrCancelResponse, error)
 }
@@ -94,6 +95,15 @@ func (c *lessonsServiceClient) GetAllLessons(ctx context.Context, in *GetRequest
 	return out, nil
 }
 
+func (c *lessonsServiceClient) GetLesson(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*Lesson, error) {
+	out := new(Lesson)
+	err := c.cc.Invoke(ctx, "/lessons.LessonsService/GetLesson", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *lessonsServiceClient) CloseLesson(ctx context.Context, in *CloseRequest, opts ...grpc.CallOption) (*CloseResponse, error) {
 	out := new(CloseResponse)
 	err := c.cc.Invoke(ctx, "/lessons.LessonsService/CloseLesson", in, out, opts...)
@@ -122,6 +132,7 @@ type LessonsServiceServer interface {
 	GetLessonsByTrainer(context.Context, *GetRequest) (*GetResponse, error)
 	GetLessonsByUser(context.Context, *GetRequest) (*GetResponse, error)
 	GetAllLessons(context.Context, *GetRequest) (*GetResponse, error)
+	GetLesson(context.Context, *GetRequest) (*Lesson, error)
 	CloseLesson(context.Context, *CloseRequest) (*CloseResponse, error)
 	SignUpForLessonOrCancel(context.Context, *SignUpOrCancelRequest) (*SignUpOrCancelResponse, error)
 	mustEmbedUnimplementedLessonsServiceServer()
@@ -148,6 +159,9 @@ func (UnimplementedLessonsServiceServer) GetLessonsByUser(context.Context, *GetR
 }
 func (UnimplementedLessonsServiceServer) GetAllLessons(context.Context, *GetRequest) (*GetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllLessons not implemented")
+}
+func (UnimplementedLessonsServiceServer) GetLesson(context.Context, *GetRequest) (*Lesson, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLesson not implemented")
 }
 func (UnimplementedLessonsServiceServer) CloseLesson(context.Context, *CloseRequest) (*CloseResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CloseLesson not implemented")
@@ -276,6 +290,24 @@ func _LessonsService_GetAllLessons_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _LessonsService_GetLesson_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LessonsServiceServer).GetLesson(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/lessons.LessonsService/GetLesson",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LessonsServiceServer).GetLesson(ctx, req.(*GetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _LessonsService_CloseLesson_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CloseRequest)
 	if err := dec(in); err != nil {
@@ -342,6 +374,10 @@ var LessonsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAllLessons",
 			Handler:    _LessonsService_GetAllLessons_Handler,
+		},
+		{
+			MethodName: "GetLesson",
+			Handler:    _LessonsService_GetLesson_Handler,
 		},
 		{
 			MethodName: "CloseLesson",
