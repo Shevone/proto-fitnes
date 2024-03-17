@@ -4,7 +4,7 @@
 // - protoc             v5.26.0--rc1
 // source: lessons/lessons.proto
 
-package lessonsFitnesv1
+package lessons
 
 import (
 	context "context"

@@ -13,11 +13,12 @@ message Lesson {
   int64 lesson_id = 1;
   string title = 2; // Название занятия
   string time = 3;
-  int64 trainer_id = 4;
-  int32 available_seats = 5;
-  string description = 6;
-  Difficulty difficulty = 7;
-  int32 is_complete = 8;
+  string date = 4;
+  int64 trainer_id = 5;
+  int32 available_seats = 6;
+  string description = 7;
+  Difficulty difficulty = 8;
+  int32 is_complete = 9;
 }
 // Создать
 // Удалить
@@ -39,10 +40,11 @@ service LessonsService{
 message CreateRequest{
   string title = 1; // Название занятия
   string time = 2;
-  int64 trainer_id = 3;
-  int32 available_seats = 4;
-  string description = 5;
-  Difficulty difficulty = 6;
+  string date = 3;
+  int64 trainer_id = 4;
+  int32 available_seats = 5;
+  string description = 6;
+  Difficulty difficulty = 7;
 }
 message CreateResponse{
   int64 lesson_id = 1;
