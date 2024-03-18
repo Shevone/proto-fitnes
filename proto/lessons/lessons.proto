@@ -73,7 +73,8 @@ message GetResponse{
 }
 // ======================================================================================
 message CloseRequest{
-  int64 trainer_id = 1;
+  int64 lesson_id = 1;
+  int64 trainer_id = 2;
 }
 message CloseResponse{
   string message = 1;
