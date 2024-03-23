@@ -26,6 +26,7 @@ message UserModel {
   string patronymic = 5;
   Role role = 6;
   string phoneNumber = 7;
+
 }
 // ============================================================================
 // Регистрация
@@ -52,7 +53,7 @@ message EditRequest{
   string patronymic = 4;
 }
 message EditResponse{
-  UserModel user =1;
+  string message = 1;
 }
 // ============================================================================
 message LoginRequest{
