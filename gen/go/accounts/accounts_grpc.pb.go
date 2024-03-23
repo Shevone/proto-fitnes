@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v5.26.0--rc1
-// source: auth/auth.proto
+// source: accounts/accounts.proto
 
-package authFitnesv1
+package accountsFitnesv1
 
 import (
 	context "context"
@@ -26,6 +26,8 @@ type AuthClient interface {
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	EditProfile(ctx context.Context, in *EditRequest, opts ...grpc.CallOption) (*EditResponse, error)
 	GetUserData(ctx context.Context, in *GetDataRequest, opts ...grpc.CallOption) (*GetDataResponse, error)
+	GetUsers(ctx context.Context, in *GetUsersRequest, opts ...grpc.CallOption) (*GetUsersResponse, error)
+	UpdateUserRole(ctx context.Context, in *UpdateUserRoleReq, opts ...grpc.CallOption) (*UpdateUserRoleResp, error)
 }
 
 type authClient struct {
@@ -38,7 +40,7 @@ func NewAuthClient(cc grpc.ClientConnInterface) AuthClient {
 
 func (c *authClient) Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error) {
 	out := new(RegisterResponse)
-	err := c.cc.Invoke(ctx, "/auth.Auth/Register", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/accounts.Auth/Register", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +49,7 @@ func (c *authClient) Register(ctx context.Context, in *RegisterRequest, opts ...
 
 func (c *authClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
 	out := new(LoginResponse)
-	err := c.cc.Invoke(ctx, "/auth.Auth/Login", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/accounts.Auth/Login", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +58,7 @@ func (c *authClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.C
 
 func (c *authClient) EditProfile(ctx context.Context, in *EditRequest, opts ...grpc.CallOption) (*EditResponse, error) {
 	out := new(EditResponse)
-	err := c.cc.Invoke(ctx, "/auth.Auth/EditProfile", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/accounts.Auth/EditProfile", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +67,25 @@ func (c *authClient) EditProfile(ctx context.Context, in *EditRequest, opts ...g
 
 func (c *authClient) GetUserData(ctx context.Context, in *GetDataRequest, opts ...grpc.CallOption) (*GetDataResponse, error) {
 	out := new(GetDataResponse)
-	err := c.cc.Invoke(ctx, "/auth.Auth/GetUserData", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/accounts.Auth/GetUserData", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authClient) GetUsers(ctx context.Context, in *GetUsersRequest, opts ...grpc.CallOption) (*GetUsersResponse, error) {
+	out := new(GetUsersResponse)
+	err := c.cc.Invoke(ctx, "/accounts.Auth/GetUsers", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authClient) UpdateUserRole(ctx context.Context, in *UpdateUserRoleReq, opts ...grpc.CallOption) (*UpdateUserRoleResp, error) {
+	out := new(UpdateUserRoleResp)
+	err := c.cc.Invoke(ctx, "/accounts.Auth/UpdateUserRole", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -80,6 +100,8 @@ type AuthServer interface {
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	EditProfile(context.Context, *EditRequest) (*EditResponse, error)
 	GetUserData(context.Context, *GetDataRequest) (*GetDataResponse, error)
+	GetUsers(context.Context, *GetUsersRequest) (*GetUsersResponse, error)
+	UpdateUserRole(context.Context, *UpdateUserRoleReq) (*UpdateUserRoleResp, error)
 	mustEmbedUnimplementedAuthServer()
 }
 
@@ -98,6 +120,12 @@ func (UnimplementedAuthServer) EditProfile(context.Context, *EditRequest) (*Edit
 }
 func (UnimplementedAuthServer) GetUserData(context.Context, *GetDataRequest) (*GetDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserData not implemented")
+}
+func (UnimplementedAuthServer) GetUsers(context.Context, *GetUsersRequest) (*GetUsersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUsers not implemented")
+}
+func (UnimplementedAuthServer) UpdateUserRole(context.Context, *UpdateUserRoleReq) (*UpdateUserRoleResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserRole not implemented")
 }
 func (UnimplementedAuthServer) mustEmbedUnimplementedAuthServer() {}
 
@@ -122,7 +150,7 @@ func _Auth_Register_Handler(srv interface{}, ctx context.Context, dec func(inter
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/auth.Auth/Register",
+		FullMethod: "/accounts.Auth/Register",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServer).Register(ctx, req.(*RegisterRequest))
@@ -140,7 +168,7 @@ func _Auth_Login_Handler(srv interface{}, ctx context.Context, dec func(interfac
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/auth.Auth/Login",
+		FullMethod: "/accounts.Auth/Login",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServer).Login(ctx, req.(*LoginRequest))
@@ -158,7 +186,7 @@ func _Auth_EditProfile_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/auth.Auth/EditProfile",
+		FullMethod: "/accounts.Auth/EditProfile",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServer).EditProfile(ctx, req.(*EditRequest))
@@ -176,10 +204,46 @@ func _Auth_GetUserData_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/auth.Auth/GetUserData",
+		FullMethod: "/accounts.Auth/GetUserData",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServer).GetUserData(ctx, req.(*GetDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Auth_GetUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUsersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServer).GetUsers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/accounts.Auth/GetUsers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServer).GetUsers(ctx, req.(*GetUsersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Auth_UpdateUserRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserRoleReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServer).UpdateUserRole(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/accounts.Auth/UpdateUserRole",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServer).UpdateUserRole(ctx, req.(*UpdateUserRoleReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -188,7 +252,7 @@ func _Auth_GetUserData_Handler(srv interface{}, ctx context.Context, dec func(in
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Auth_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "auth.Auth",
+	ServiceName: "accounts.Auth",
 	HandlerType: (*AuthServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -207,7 +271,15 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "GetUserData",
 			Handler:    _Auth_GetUserData_Handler,
 		},
+		{
+			MethodName: "GetUsers",
+			Handler:    _Auth_GetUsers_Handler,
+		},
+		{
+			MethodName: "UpdateUserRole",
+			Handler:    _Auth_UpdateUserRole_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "auth/auth.proto",
+	Metadata: "accounts/accounts.proto",
 }
