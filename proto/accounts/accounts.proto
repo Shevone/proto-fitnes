@@ -5,28 +5,44 @@ package accounts;
 
 option  go_package = "nickolay.accountsFitnes.v1;accountsFitnesv1";
 
+
+
 service Auth{
   rpc Register(RegisterRequest) returns (RegisterResponse); // Метод регистрации
   rpc Login(LoginRequest) returns (LoginResponse);
+
   rpc EditProfile (EditRequest) returns (EditResponse);
+
   rpc GetUserData (GetDataRequest) returns (GetDataResponse);
+
   rpc GetUsers(GetUsersRequest) returns (GetUsersResponse);
   rpc UpdateUserRole(UpdateUserRoleReq) returns (UpdateUserRoleResp);
+  rpc UpdateUserSub(UpdateSubReq)returns (UpdateSubResp);
+
 }
 enum Role {
   User = 0;
   Trainer = 1;
   Admin = 2;
 }
+enum Subscribe{
+  AdminTrainer = 0;
+  Year = 1;
+  HalfYear = 2;
+  ThreeMount = 3;
+  None = 4;
+}
+
+
 message UserModel {
-  int64 id = 1;
+  string id = 1;
   string email =2;
   string name = 3;
   string surname = 4;
   string patronymic = 5;
   Role role = 6;
   string phoneNumber = 7;
-
+  Subscribe sub = 8;
 }
 // ============================================================================
 // Регистрация
@@ -43,11 +59,11 @@ message RegisterRequest{
 
 // Ответ
 message RegisterResponse{
-  int64 user_id = 1; // ID зарегистрированного  пользователя
+  string user_id = 1; // ID зарегистрированного  пользователя
 }
 // =============================================================================
 message EditRequest{
-  int64 user_id = 1;
+  string user_id = 1;
   string name = 2;
   string surname = 3;
   string patronymic = 4;
@@ -83,9 +99,18 @@ message GetUsersResponse{
 
 // =============================================================================
 message UpdateUserRoleReq{
-  int64 userId = 1;
+  string userId = 1;
   Role role = 2;
 }
 message UpdateUserRoleResp{
+  string message = 1;
+}
+
+// =============================================================================
+message UpdateSubReq{
+  string userId = 1;
+  Subscribe sub = 2;
+}
+message UpdateSubResp{
   string message = 1;
 }
