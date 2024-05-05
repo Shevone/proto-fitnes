@@ -25,13 +25,7 @@ enum Role {
   Trainer = 1;
   Admin = 2;
 }
-enum Subscribe{
-  AdminTrainer = 0;
-  Year = 1;
-  HalfYear = 2;
-  ThreeMount = 3;
-  None = 4;
-}
+
 
 
 message UserModel {
@@ -42,7 +36,9 @@ message UserModel {
   string patronymic = 5;
   Role role = 6;
   string phoneNumber = 7;
-  Subscribe sub = 8;
+  string createData = 9;
+  int64 membershipMontCount = 10;
+  bool membershipActual = 11;
 }
 // ============================================================================
 // Регистрация
@@ -59,7 +55,7 @@ message RegisterRequest{
 
 // Ответ
 message RegisterResponse{
-  string user_id = 1; // ID зарегистрированного  пользователя
+  int64 user_id = 1; // ID зарегистрированного  пользователя
 }
 // =============================================================================
 message EditRequest{
@@ -109,7 +105,7 @@ message UpdateUserRoleResp{
 // =============================================================================
 message UpdateSubReq{
   int64 userId = 1;
-  Subscribe sub = 2;
+  int64 month = 2;
 }
 message UpdateSubResp{
   string message = 1;
