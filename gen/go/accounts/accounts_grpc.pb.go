@@ -28,7 +28,7 @@ type AuthClient interface {
 	GetUserData(ctx context.Context, in *GetDataRequest, opts ...grpc.CallOption) (*GetDataResponse, error)
 	GetUsers(ctx context.Context, in *GetUsersRequest, opts ...grpc.CallOption) (*GetUsersResponse, error)
 	UpdateUserRole(ctx context.Context, in *UpdateUserRoleReq, opts ...grpc.CallOption) (*UpdateUserRoleResp, error)
-	UpdateUserSub(ctx context.Context, in *UpdateSubReq, opts ...grpc.CallOption) (*UpdateSubResp, error)
+	UpdateUserPassword(ctx context.Context, in *UpdateUserPasswordReq, opts ...grpc.CallOption) (*UpdateUserPasswordResp, error)
 }
 
 type authClient struct {
@@ -93,9 +93,9 @@ func (c *authClient) UpdateUserRole(ctx context.Context, in *UpdateUserRoleReq, 
 	return out, nil
 }
 
-func (c *authClient) UpdateUserSub(ctx context.Context, in *UpdateSubReq, opts ...grpc.CallOption) (*UpdateSubResp, error) {
-	out := new(UpdateSubResp)
-	err := c.cc.Invoke(ctx, "/accounts.Auth/UpdateUserSub", in, out, opts...)
+func (c *authClient) UpdateUserPassword(ctx context.Context, in *UpdateUserPasswordReq, opts ...grpc.CallOption) (*UpdateUserPasswordResp, error) {
+	out := new(UpdateUserPasswordResp)
+	err := c.cc.Invoke(ctx, "/accounts.Auth/UpdateUserPassword", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -112,7 +112,7 @@ type AuthServer interface {
 	GetUserData(context.Context, *GetDataRequest) (*GetDataResponse, error)
 	GetUsers(context.Context, *GetUsersRequest) (*GetUsersResponse, error)
 	UpdateUserRole(context.Context, *UpdateUserRoleReq) (*UpdateUserRoleResp, error)
-	UpdateUserSub(context.Context, *UpdateSubReq) (*UpdateSubResp, error)
+	UpdateUserPassword(context.Context, *UpdateUserPasswordReq) (*UpdateUserPasswordResp, error)
 	mustEmbedUnimplementedAuthServer()
 }
 
@@ -138,8 +138,8 @@ func (UnimplementedAuthServer) GetUsers(context.Context, *GetUsersRequest) (*Get
 func (UnimplementedAuthServer) UpdateUserRole(context.Context, *UpdateUserRoleReq) (*UpdateUserRoleResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserRole not implemented")
 }
-func (UnimplementedAuthServer) UpdateUserSub(context.Context, *UpdateSubReq) (*UpdateSubResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserSub not implemented")
+func (UnimplementedAuthServer) UpdateUserPassword(context.Context, *UpdateUserPasswordReq) (*UpdateUserPasswordResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserPassword not implemented")
 }
 func (UnimplementedAuthServer) mustEmbedUnimplementedAuthServer() {}
 
@@ -262,20 +262,20 @@ func _Auth_UpdateUserRole_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Auth_UpdateUserSub_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateSubReq)
+func _Auth_UpdateUserPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserPasswordReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServer).UpdateUserSub(ctx, in)
+		return srv.(AuthServer).UpdateUserPassword(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/accounts.Auth/UpdateUserSub",
+		FullMethod: "/accounts.Auth/UpdateUserPassword",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServer).UpdateUserSub(ctx, req.(*UpdateSubReq))
+		return srv.(AuthServer).UpdateUserPassword(ctx, req.(*UpdateUserPasswordReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -312,8 +312,8 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Auth_UpdateUserRole_Handler,
 		},
 		{
-			MethodName: "UpdateUserSub",
-			Handler:    _Auth_UpdateUserSub_Handler,
+			MethodName: "UpdateUserPassword",
+			Handler:    _Auth_UpdateUserPassword_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
