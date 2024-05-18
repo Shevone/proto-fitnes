@@ -48,10 +48,11 @@ message RegisterResponse{
 }
 // =============================================================================
 message EditRequest{
-  int64 user_id = 1;
-  string name = 2;
-  string surname = 3;
-  string patronymic = 4;
+  int64 updaterId = 1;
+  int64 user_id = 2;
+  string name = 3;
+  string surname = 4;
+  string patronymic = 5;
 }
 message EditResponse{
   string message = 1;
@@ -84,16 +85,18 @@ message GetUsersResponse{
 
 // =============================================================================
 message UpdateUserRoleReq{
-  int64 userId = 1;
-  Role role = 2;
+  int64 updaterId = 1;
+  int64 userId = 2;
+  Role role = 3;
 }
 message UpdateUserRoleResp{
   string message = 1;
 }
 // =============================================================================
 message UpdateUserPasswordReq{
-  int64 userId = 1;
-  string password = 2;
+  int64 updaterId = 1;
+  int64 userId = 2;
+  string password = 3;
 }
 message  UpdateUserPasswordResp{
   string message = 1;
