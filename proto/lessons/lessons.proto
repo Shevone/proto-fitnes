@@ -12,13 +12,13 @@ enum Difficulty {
 message Lesson {
   int64 lesson_id = 1;
   string title = 2; // Название занятия
-  string time = 3;
-  string date = 4;
-  int64 trainer_id = 5;
-  int32 available_seats = 6;
-  string description = 7;
-  Difficulty difficulty = 8;
-  int32 is_complete = 9;
+  int64 trainer_id = 3;
+  int32 available_seats = 4;
+  string description = 5;
+  Difficulty difficulty = 6;
+  string time = 7;
+  int32 seatsCount = 8;
+  int32 dayOfWeek = 9;
 }
 // Создать
 // Удалить
@@ -31,8 +31,8 @@ service LessonsService{
   rpc EditLesson (EditRequest) returns (EditResponse); // Редактировать занятие
   rpc GetLessonsByTrainer(GetRequest) returns (GetResponse); // Все занятия по id тренера
   rpc GetLessonsByUser(GetRequest) returns (GetResponse); // Все занятия по id пользователя
-  rpc GetAllLessons(GetRequest) returns (GetResponse); // Достать все занятия
-  rpc GetLesson(GetRequest) returns (Lesson); // Получить все данные по одному занятию
+  rpc GetAllLessons(GetLessonRequest) returns (GetResponse); // Достать все занятия
+  rpc GetLesson(GetLessonRequest) returns (Lesson); // Получить все данные по одному занятию
   rpc CloseLesson (CloseRequest) returns (CloseResponse); // Закрыть занятие
   rpc SignUpForLessonOrCancel (SignUpOrCancelRequest) returns (SignUpOrCancelResponse); // Записаться на занятие или выписаться
 }
@@ -40,7 +40,7 @@ service LessonsService{
 message CreateRequest{
   string title = 1; // Название занятия
   string time = 2;
-  string date = 3;
+  int32 dayOfWeek = 3;
   int64 trainer_id = 4;
   int32 available_seats = 5;
   string description = 6;
@@ -70,7 +70,7 @@ message GetRequest{
   int32 page = 3;
 }
 message GetResponse{
-  repeated Lesson lessons =1;
+  repeated Lesson lessons = 1;
 }
 // ======================================================================================
 message CloseRequest{
@@ -89,4 +89,6 @@ message SignUpOrCancelResponse{
   string message = 1;
 }
 // ======================================================================================
-
+message GetLessonRequest{
+  int32 dayOfWeek = 1;
+}
