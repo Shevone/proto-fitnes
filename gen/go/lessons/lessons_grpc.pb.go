@@ -27,7 +27,7 @@ type LessonsServiceClient interface {
 	EditLesson(ctx context.Context, in *EditRequest, opts ...grpc.CallOption) (*EditResponse, error)
 	GetLessonsByTrainer(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	GetLessonsByUser(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
-	GetAllLessons(ctx context.Context, in *GetLessonRequest, opts ...grpc.CallOption) (*GetResponse, error)
+	GetAllLessons(ctx context.Context, in *GetLessonsRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	GetLesson(ctx context.Context, in *GetLessonRequest, opts ...grpc.CallOption) (*Lesson, error)
 	CloseLesson(ctx context.Context, in *CloseRequest, opts ...grpc.CallOption) (*CloseResponse, error)
 	SignUpForLessonOrCancel(ctx context.Context, in *SignUpOrCancelRequest, opts ...grpc.CallOption) (*SignUpOrCancelResponse, error)
@@ -86,7 +86,7 @@ func (c *lessonsServiceClient) GetLessonsByUser(ctx context.Context, in *GetRequ
 	return out, nil
 }
 
-func (c *lessonsServiceClient) GetAllLessons(ctx context.Context, in *GetLessonRequest, opts ...grpc.CallOption) (*GetResponse, error) {
+func (c *lessonsServiceClient) GetAllLessons(ctx context.Context, in *GetLessonsRequest, opts ...grpc.CallOption) (*GetResponse, error) {
 	out := new(GetResponse)
 	err := c.cc.Invoke(ctx, "/lessons.LessonsService/GetAllLessons", in, out, opts...)
 	if err != nil {
@@ -131,7 +131,7 @@ type LessonsServiceServer interface {
 	EditLesson(context.Context, *EditRequest) (*EditResponse, error)
 	GetLessonsByTrainer(context.Context, *GetRequest) (*GetResponse, error)
 	GetLessonsByUser(context.Context, *GetRequest) (*GetResponse, error)
-	GetAllLessons(context.Context, *GetLessonRequest) (*GetResponse, error)
+	GetAllLessons(context.Context, *GetLessonsRequest) (*GetResponse, error)
 	GetLesson(context.Context, *GetLessonRequest) (*Lesson, error)
 	CloseLesson(context.Context, *CloseRequest) (*CloseResponse, error)
 	SignUpForLessonOrCancel(context.Context, *SignUpOrCancelRequest) (*SignUpOrCancelResponse, error)
@@ -157,7 +157,7 @@ func (UnimplementedLessonsServiceServer) GetLessonsByTrainer(context.Context, *G
 func (UnimplementedLessonsServiceServer) GetLessonsByUser(context.Context, *GetRequest) (*GetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetLessonsByUser not implemented")
 }
-func (UnimplementedLessonsServiceServer) GetAllLessons(context.Context, *GetLessonRequest) (*GetResponse, error) {
+func (UnimplementedLessonsServiceServer) GetAllLessons(context.Context, *GetLessonsRequest) (*GetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllLessons not implemented")
 }
 func (UnimplementedLessonsServiceServer) GetLesson(context.Context, *GetLessonRequest) (*Lesson, error) {
@@ -273,7 +273,7 @@ func _LessonsService_GetLessonsByUser_Handler(srv interface{}, ctx context.Conte
 }
 
 func _LessonsService_GetAllLessons_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetLessonRequest)
+	in := new(GetLessonsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -285,7 +285,7 @@ func _LessonsService_GetAllLessons_Handler(srv interface{}, ctx context.Context,
 		FullMethod: "/lessons.LessonsService/GetAllLessons",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LessonsServiceServer).GetAllLessons(ctx, req.(*GetLessonRequest))
+		return srv.(LessonsServiceServer).GetAllLessons(ctx, req.(*GetLessonsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
