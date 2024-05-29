@@ -18,6 +18,7 @@ enum Role {
   User = 0;
   Trainer = 1;
   Admin = 2;
+  New = 3;
 }
 message UserModel {
   int64 id = 1;
