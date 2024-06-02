@@ -29,6 +29,7 @@ type AuthClient interface {
 	GetUsers(ctx context.Context, in *GetUsersRequest, opts ...grpc.CallOption) (*GetUsersResponse, error)
 	UpdateUserRole(ctx context.Context, in *UpdateUserRoleReq, opts ...grpc.CallOption) (*UpdateUserRoleResp, error)
 	UpdateUserPassword(ctx context.Context, in *UpdateUserPasswordReq, opts ...grpc.CallOption) (*UpdateUserPasswordResp, error)
+	IsAdmin(ctx context.Context, in *IsAdminReq, opts ...grpc.CallOption) (*IsAdminResp, error)
 }
 
 type authClient struct {
@@ -102,6 +103,15 @@ func (c *authClient) UpdateUserPassword(ctx context.Context, in *UpdateUserPassw
 	return out, nil
 }
 
+func (c *authClient) IsAdmin(ctx context.Context, in *IsAdminReq, opts ...grpc.CallOption) (*IsAdminResp, error) {
+	out := new(IsAdminResp)
+	err := c.cc.Invoke(ctx, "/accounts.Auth/IsAdmin", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthServer is the server API for Auth service.
 // All implementations must embed UnimplementedAuthServer
 // for forward compatibility
@@ -113,6 +123,7 @@ type AuthServer interface {
 	GetUsers(context.Context, *GetUsersRequest) (*GetUsersResponse, error)
 	UpdateUserRole(context.Context, *UpdateUserRoleReq) (*UpdateUserRoleResp, error)
 	UpdateUserPassword(context.Context, *UpdateUserPasswordReq) (*UpdateUserPasswordResp, error)
+	IsAdmin(context.Context, *IsAdminReq) (*IsAdminResp, error)
 	mustEmbedUnimplementedAuthServer()
 }
 
@@ -140,6 +151,9 @@ func (UnimplementedAuthServer) UpdateUserRole(context.Context, *UpdateUserRoleRe
 }
 func (UnimplementedAuthServer) UpdateUserPassword(context.Context, *UpdateUserPasswordReq) (*UpdateUserPasswordResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserPassword not implemented")
+}
+func (UnimplementedAuthServer) IsAdmin(context.Context, *IsAdminReq) (*IsAdminResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IsAdmin not implemented")
 }
 func (UnimplementedAuthServer) mustEmbedUnimplementedAuthServer() {}
 
@@ -280,6 +294,24 @@ func _Auth_UpdateUserPassword_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Auth_IsAdmin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IsAdminReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServer).IsAdmin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/accounts.Auth/IsAdmin",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServer).IsAdmin(ctx, req.(*IsAdminReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Auth_ServiceDesc is the grpc.ServiceDesc for Auth service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -314,6 +346,10 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateUserPassword",
 			Handler:    _Auth_UpdateUserPassword_Handler,
+		},
+		{
+			MethodName: "IsAdmin",
+			Handler:    _Auth_IsAdmin_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
