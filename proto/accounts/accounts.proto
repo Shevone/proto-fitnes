@@ -6,13 +6,9 @@ package accounts;
 option  go_package = "nickolay.accountsFitnes.v1;accountsFitnesv1";
 
 service Auth{
-  rpc Register(RegisterRequest) returns (RegisterResponse); // Метод регистрации
-  rpc Login(LoginRequest) returns (LoginResponse);
   rpc EditProfile (EditRequest) returns (EditResponse);
-  rpc GetUserData (GetDataRequest) returns (GetDataResponse);
+  rpc GetUserData (GetUserRequests) returns (GetDataResponse);
   rpc GetUsers(GetUsersRequest) returns (GetUsersResponse);
-  rpc UpdateUserRole(UpdateUserRoleReq) returns (UpdateUserRoleResp);
-  rpc UpdateUserPassword(UpdateUserPasswordReq) returns (UpdateUserPasswordResp);
 }
 enum Role {
   User = 0;
@@ -21,60 +17,36 @@ enum Role {
   New = 3;
 }
 message UserModel {
-  int64 id = 1;
-  string email =2;
+  string uuid = 1;
+  string login =2;
   string name = 3;
   string surname = 4;
   string patronymic = 5;
   Role role = 6;
-  string phoneNumber = 7;
-
-}
-// ============================================================================
-// Регистрация
-// Запрос
-message RegisterRequest{
-  string email = 1; // Email регистрируемого пользователя
-  string password = 2; // пароль регистрируемого пользователя
-  string name = 3;
-  string surname = 4;
-  string patronymic = 5;
-  Role role = 6;
-  string phoneNumber = 7;
-}
-
-// Ответ
-message RegisterResponse{
-  int64 user_id = 1; // ID зарегистрированного  пользователя
 }
 // =============================================================================
 message EditRequest{
-  int64 updaterId = 1;
-  int64 user_id = 2;
+  string userUUID = 2;
   string name = 3;
   string surname = 4;
   string patronymic = 5;
 }
+
 message EditResponse{
   string message = 1;
 }
+
+
 // ============================================================================
-message LoginRequest{
-  string email = 1;// Email входящего пользователя
-  string password = 2;// Пароль входящего пользователя
-}
-message LoginResponse{
-  string token = 1; // Токен аутентификации
-}
-// ============================================================================
-message GetDataRequest{
-  int64 user_id = 1;
+message GetUserRequests{
+  string userUUUID = 1;
 }
 message GetDataResponse{
   UserModel user = 1;
 }
-// ============================================================================
 
+
+// ============================================================================
 message GetUsersRequest{
   int64 page = 1;
   int64 limit = 2;
@@ -84,21 +56,4 @@ message GetUsersResponse{
   repeated UserModel users = 1;
 }
 
-// =============================================================================
-message UpdateUserRoleReq{
-  int64 updaterId = 1;
-  int64 userId = 2;
-  Role role = 3;
-}
-message UpdateUserRoleResp{
-  string message = 1;
-}
-// =============================================================================
-message UpdateUserPasswordReq{
-  int64 updaterId = 1;
-  int64 userId = 2;
-  string password = 3;
-}
-message  UpdateUserPasswordResp{
-  string message = 1;
-}
+

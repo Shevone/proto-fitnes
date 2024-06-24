@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package lessons;
+
+option  go_package = "nickolay.lessonsFitnes.v1;lessonsFitnesv1";
+
+enum Difficulty {
+  EASY = 0;
+  MEDIUM = 1;
+  HARD = 2;
+}
+message Training {
+  string trainingUUID = 1;
+  string title = 2;
+  string trainerUUID= 3;
+  int32 availableSeats = 4;
+  string description = 5;
+  Difficulty difficulty = 6;
+  string time = 7;
+  int32 dayOfWeek = 8;
+}
+
+// Todo тут должны быть записи на занятия пользователями
+// Записаться
+// Отписаться
+
+// Получить список записей пользователя на определенный день
+// Получить полный список записей
+
+// Сколько свободных мест на опредленное занятие
+// Сообщить о освободившихся местах
+
+
+service TrainingService{
+  rpc SignUpForTraining(SignRequest) returns (Response);
+  rpc CancelAnAppointment(CanceleRequest) returns (Response);
+
+  rpc GetUserLessonIds(GetUserTrainingRequest) returns (GetIdsResponse);
+  rpc GetUserLessonIdsWeekDay(GetUserTrainingRequest) returns (GetIdsResponse);
+
+  rpc GetTrainingFreeSeatsCount(GetSeatsRequest) returns (GetSeatsRespose);
+  rpc SubscribeForFreeSeats(SubRequest) returns (SubResponse);
+
+}
+
+
