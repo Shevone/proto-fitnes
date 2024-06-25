@@ -33,14 +33,51 @@ message Training {
 
 service TrainingService{
   rpc SignUpForTraining(SignRequest) returns (Response);
-  rpc CancelAnAppointment(CanceleRequest) returns (Response);
+  rpc CancelAnAppointment(CancelRequest) returns (Response);
 
   rpc GetUserLessonIds(GetUserTrainingRequest) returns (GetIdsResponse);
-  rpc GetUserLessonIdsWeekDay(GetUserTrainingRequest) returns (GetIdsResponse);
+  rpc GetUserLessonIdsWeekDay(GetUserTrainingRequestWeekDay) returns (GetIdsResponse);
 
-  rpc GetTrainingFreeSeatsCount(GetSeatsRequest) returns (GetSeatsRespose);
+  rpc GetTrainingFreeSeatsCount(GetSeatsRequest) returns (GetSeatsResponse);
   rpc SubscribeForFreeSeats(SubRequest) returns (SubResponse);
+}
+
+// =====================================================
+message SignRequest{
 
 }
 
+message CancelRequest{
 
+}
+
+message Response{
+
+}
+
+// ======================================================
+message GetUserTrainingRequest{
+
+}
+message GetUserTrainingRequestWeekDay{
+
+}
+message GetIdsResponse{
+
+}
+
+// ======================================================
+message GetSeatsRequest{
+
+}
+message GetSeatsResponse{
+
+}
+
+// ======================================================
+message SubRequest{
+
+}
+message SubResponse{
+
+}
