@@ -1,24 +1,9 @@
 syntax = "proto3";
 
-package lessons;
+package subscription;
 
-option  go_package = "nickolay.lessonsFitnes.v1;lessonsFitnesv1";
+option  go_package = "nickolay.subscription.v1;subscriptionv1";
 
-enum Difficulty {
-  EASY = 0;
-  MEDIUM = 1;
-  HARD = 2;
-}
-message Training {
-  string trainingUUID = 1;
-  string title = 2;
-  string trainerUUID= 3;
-  int32 availableSeats = 4;
-  string description = 5;
-  Difficulty difficulty = 6;
-  string time = 7;
-  int32 dayOfWeek = 8;
-}
 
 // Todo тут должны быть записи на занятия пользователями
 // Записаться
@@ -36,7 +21,6 @@ service TrainingService{
   rpc CancelAnAppointment(CancelRequest) returns (Response);
 
   rpc GetUserLessonIds(GetUserTrainingRequest) returns (GetIdsResponse);
-  rpc GetUserLessonIdsWeekDay(GetUserTrainingRequestWeekDay) returns (GetIdsResponse);
 
   rpc GetTrainingFreeSeatsCount(GetSeatsRequest) returns (GetSeatsResponse);
   rpc SubscribeForFreeSeats(SubRequest) returns (SubResponse);
@@ -44,40 +28,41 @@ service TrainingService{
 
 // =====================================================
 message SignRequest{
-
+  string userUUID = 1;
+  string lessonUUID = 2;
 }
 
 message CancelRequest{
-
+  string userUUID = 1;
+  string lessonUUID = 2;
 }
 
 message Response{
-
+  bool result = 1;
 }
 
 // ======================================================
 message GetUserTrainingRequest{
-
-}
-message GetUserTrainingRequestWeekDay{
-
+  string userUUID = 1;
 }
 message GetIdsResponse{
-
+  repeated string trainingUUIDs = 1;
 }
 
 // ======================================================
 message GetSeatsRequest{
-
+  string trainingUUID = 1;
 }
 message GetSeatsResponse{
-
+  int32 freeSeatsCount = 1;
 }
 
 // ======================================================
 message SubRequest{
-
+  string userUUID = 1;
+  string trainingUUID = 2;
 }
 message SubResponse{
-
+  string message = 1;
+  bool result = 2;
 }

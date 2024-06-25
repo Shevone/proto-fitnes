@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package lessons;
+package training;
 
-option  go_package = "nickolay.lessonsFitnes.v1;lessonsFitnesv1";
+option  go_package = "nickolay.training.v1;training.v1";
 
 enum Difficulty {
   EASY = 0;
@@ -22,45 +22,14 @@ message Training {
 
 // Todo тут должны быть только CRUD операции
 service TrainingService{
-  rpc CreateTraining(CreateRequest) returns (CreateResponse);
-  rpc DeleteTraining(DeleteRequest) returns (DeleteResponse);
-  rpc EditTraining (EditRequest) returns (EditResponse);
-
   rpc GetTraining(GetTrainingRequest) returns (Training);
   rpc GetTrainingByWeekDay(GetTrainingsByWeekDay) returns (GetResponse);
   rpc GetTrainingByTrainerAndWeekDay(GetByTrainer) returns (GetResponse);
   rpc GetTrainingByUserAndWeekDay(GetByUser) returns (GetResponse);
 
 }
-// ======================================================================================
-message CreateRequest{
-  string title = 1;
-  string time = 2;
-  int32 dayOfWeek = 3;
-  string trainerUUID = 4;
-  int32 availableSeats = 5;
-  string description = 6;
-  Difficulty difficulty = 7;
-}
-message CreateResponse{
-  bool result = 1;
-}
 
-// ======================================================================================
-message DeleteRequest{
-  string UUID = 1;
-}
-message DeleteResponse{
-  bool result = 1;
-}
 
-// ======================================================================================
-message EditRequest{
-  Training lesson = 1;
-}
-message EditResponse{
-  bool result = 1;
-}
 
 
 // ======================================================================================
