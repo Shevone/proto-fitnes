@@ -3,27 +3,29 @@ syntax = "proto3";
 
 package accounts;
 
-option  go_package = "nickolay.accountsFitnes.v1;accountsFitnesv1";
+option  go_package = "auth.v1;accounts";
 
-service Auth{
+service Accounts{
   rpc EditProfile (EditRequest) returns (EditResponse);
   rpc GetUserData (GetUserRequests) returns (GetDataResponse);
   rpc GetUsers(GetUsersRequest) returns (GetUsersResponse);
 }
-enum Role {
-  User = 0;
-  Trainer = 1;
-  Admin = 2;
-  New = 3;
-}
+
 message UserModel {
   string uuid = 1;
-  string login =2;
   string name = 3;
   string surname = 4;
   string patronymic = 5;
-  Role role = 6;
+  Gender gender = 6;
+  int32 age = 7;
 }
+
+enum Gender {
+  Men = 0;
+  Women = 1;
+}
+
+
 // =============================================================================
 message EditRequest{
   string userUUID = 2;

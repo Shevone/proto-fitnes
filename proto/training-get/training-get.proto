@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package training;
+package trainingGet;
 
-option  go_package = "nickolay.training.v1;training.v1";
+option  go_package = "trainingGet.v1;trainingGet";
 
 enum Difficulty {
   EASY = 0;
@@ -21,16 +21,12 @@ message Training {
 }
 
 // Todo тут должны быть только CRUD операции
-service TrainingService{
+service TrainingGetService{
   rpc GetTraining(GetTrainingRequest) returns (Training);
   rpc GetTrainingByWeekDay(GetTrainingsByWeekDay) returns (GetResponse);
   rpc GetTrainingByTrainerAndWeekDay(GetByTrainer) returns (GetResponse);
   rpc GetTrainingByUserAndWeekDay(GetByUser) returns (GetResponse);
-
 }
-
-
-
 
 // ======================================================================================
 
@@ -51,8 +47,9 @@ message GetByTrainer{
 }
 
 // By user
+// Received week day and list of uuids
 message GetByUser{
-  string userUUID = 1;
+  repeated string trainingUUIDs = 1;
   int32 dayOfWeek = 2;
 }
 

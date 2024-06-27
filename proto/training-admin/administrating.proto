@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package trainingCreat;
+package trainingAdministrating;
 
-option  go_package = "nickolay.trainingCreat.v1;trainingCreat.v1";
+option  go_package = "trainingAdministrating.v1;trainingAdministrating";
 
 enum Difficulty {
   EASY = 0;
@@ -20,7 +20,7 @@ message Training {
   int32 dayOfWeek = 8;
 }
 
-service trainingCreate {
+service TrainingAdministrating {
   rpc CreateTraining(CreateRequest) returns (CreateResponse);
   rpc DeleteTraining(DeleteRequest) returns (DeleteResponse);
   rpc EditTraining (EditRequest) returns (EditResponse);

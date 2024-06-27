@@ -1,9 +1,9 @@
 
 syntax = "proto3";
 
-package accounts;
+package auth;
 
-option  go_package = "nickolay.accountsFitnes.v1;accountsFitnesv1";
+option  go_package = "auth.v1;auth";
 
 service Auth{
   rpc Register(RegisterRequest) returns (RegisterResponse);
@@ -13,10 +13,10 @@ service Auth{
 }
 
 enum Role {
-  User = 0;
-  Trainer = 1;
-  Admin = 2;
-  New = 3;
+  Guest = 0;
+  Client = 1;
+  Trainer = 2;
+  Admin = 3;
 }
 
 

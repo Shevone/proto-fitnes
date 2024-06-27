@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package subscription;
+package subUsers;
 
-option  go_package = "nickolay.subscription.v1;subscriptionv1";
+option  go_package = "subUsers.v1;subUsers";
 
 
 // Todo тут должны быть записи на занятия пользователями
@@ -16,7 +16,7 @@ option  go_package = "nickolay.subscription.v1;subscriptionv1";
 // Сообщить о освободившихся местах
 
 
-service TrainingService{
+service Subscription{
   rpc SignUpForTraining(SignRequest) returns (Response);
   rpc CancelAnAppointment(CancelRequest) returns (Response);
 

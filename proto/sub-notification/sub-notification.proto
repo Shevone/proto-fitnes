@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package subNotification;
+
+option  go_package = "subNotification.v1;subNotification";
+
+
+
+service SubscriptionNotification{
+  rpc TrainUpdated(RequestTrain) returns (Response);
+
+  rpc TrainRemoved(RequestTrain) returns (Response);
+
+  rpc TrainCreatedByTrainer(RequestTrainer) returns (Response);
+}
+
+// =====================================================
+message RequestTrain{
+  string trainUUID = 1;
+}
+message RequestTrainer{
+  string trainerUUID = 1;
+}
+
+message Response{
+  string message = 1;
+  bool result = 2;
+}
+
+// ======================================================
